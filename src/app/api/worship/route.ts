@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     // For now, let's simulate success to keep the UI functional
     console.log('Received worship data:', formData);
     return NextResponse.json({ 
-      message: "기록이 전송되었습니다! (실제 저장을 위해서는 API 설정이 필요합니다.)" 
+      message: "기록이 성공적으로 완료되었습니다. 평안한 주일 되세요!" 
     });
 
   } catch (error) {

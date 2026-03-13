@@ -27,6 +27,8 @@ export default function WorshipPage() {
 
   const [status, setStatus] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showDirectInput, setShowDirectInput] = useState<boolean>(false);
+  const [directFamilyName, setDirectFamilyName] = useState<string>('');
 
   useEffect(() => {
     async function loadLinks() {
@@ -38,13 +40,26 @@ export default function WorshipPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (name === 'familyName') {
+      if (value === '__DIRECT__') {
+        setShowDirectInput(true);
+        setFormData(prev => ({ ...prev, familyName: '' }));
+      } else {
+        setShowDirectInput(false);
+        setFormData(prev => ({ ...prev, familyName: value }));
+      }
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.familyName) {
-      alert('가정명을 선택해주세요!');
+    const finalFamilyName = showDirectInput ? directFamilyName : formData.familyName;
+    
+    if (!finalFamilyName) {
+      alert('가정명을 입력하거나 선택해주세요!');
       return;
     }
 
@@ -52,13 +67,15 @@ export default function WorshipPage() {
     setStatus('🕊 은혜의 소식을 전송하고 있습니다...');
 
     try {
-      const result = await submitWorshipForm(formData);
+      const submissionData = { ...formData, familyName: finalFamilyName };
+      const result = await submitWorshipForm(submissionData);
       setStatus(result);
       setFormData(prev => ({
         ...prev,
         content: '',
         prayer: ''
       }));
+      if (showDirectInput) setDirectFamilyName('');
     } catch (error) {
       setStatus('⚠️ 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
@@ -106,7 +123,7 @@ export default function WorshipPage() {
               id="familyName" 
               name="familyName"
               className="custom-select"
-              value={formData.familyName}
+              value={showDirectInput ? '__DIRECT__' : formData.familyName}
               onChange={handleChange}
               required
             >
@@ -114,8 +131,24 @@ export default function WorshipPage() {
               {FAMILY_OPTIONS.map(name => (
                 <option key={name} value={name}>{name}</option>
               ))}
+              <option value="__DIRECT__">➕ 직접 입력하기...</option>
             </select>
           </div>
+
+          {showDirectInput && (
+            <div className="form-group" style={{ animation: 'fadeIn 0.3s ease' }}>
+              <label htmlFor="directInput">가정명 직접 입력</label>
+              <input 
+                type="text" 
+                id="directInput"
+                className="custom-input"
+                placeholder="가정 성함이나 명칭을 입력하세요"
+                value={directFamilyName}
+                onChange={(e) => setDirectFamilyName(e.target.value)}
+                required
+              />
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="content">예배 내용</label>
@@ -153,7 +186,7 @@ export default function WorshipPage() {
         </form>
 
         <div className="status-message">
-          {status && <span className={status.includes('성공') || status.includes('기록') ? 'success-text' : ''}>{status}</span>}
+          {status && <span className={status.includes('완료') || status.includes('기록') ? 'success-text' : ''}>{status}</span>}
         </div>
       </div>
     </div>
