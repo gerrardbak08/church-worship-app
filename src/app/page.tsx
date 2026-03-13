@@ -216,7 +216,13 @@ export default function WorshipPage() {
     <div className={`worship-container ${notoLinks.className}`}>
       <div className="worship-card">
         <header className="worship-header">
-          <div className="worship-logo">⛪</div>
+          <div className="worship-logo">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L4 7V22H9V16H15V22H20V7L12 2Z" fill="var(--primary-color)" fillOpacity="0.1" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2V12" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M10 5L14 5" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </div>
           <h1>사랑과 평안의 교회</h1>
           <p>가족과 함께하는 은혜로운 예배 기록</p>
         </header>
