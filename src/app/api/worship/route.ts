@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { YOUTUBE_CHANNEL_ID, NAVER_BLOG_ID } from '../../../types/worship';
+import { supabase } from '../../../lib/supabase';
 
 /**
  * GET /api/worship
@@ -12,16 +13,10 @@ export async function GET() {
 
   try {
     const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
-    const response = await fetch(rssUrl, { next: { revalidate: 3600 } }); // Cache for 1 hour
+    const response = await fetch(rssUrl, { next: { revalidate: 3600 } }); 
     
     if (response.ok) {
       const text = await response.text();
-      // Simple regex to extract link and title from XML to avoid heavy XML parser dependencies server-side
-      const linkMatch = text.match(/<link rel="alternate" href="([^"]+)"\/>/);
-      const titleMatch = text.match(/<title>([^<]+)<\/title>/);
-      
-      // The first <link> and <title> in the feed are usually the channel's. 
-      // We want the first <entry>'s link and title.
       const entryMatch = text.split('<entry>')[1];
       if (entryMatch) {
          const entryLink = entryMatch.match(/<link rel="alternate" href="([^"]+)"\/>/);
@@ -39,67 +34,33 @@ export async function GET() {
 
 /**
  * POST /api/worship
- * Handles form submission.
- * Note: For production use with Google Sheets, you should install 'googleapis'
- * and set up a Service Account.
+ * Handles form submission directly to Supabase.
  */
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.json();
     
-    // --- OPTION 1: Google Apps Script Web App (Easiest transition) ---
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxllpwuoZ5xTxpTBt3Fc31KxPGmcEYxWXVDh3iZaF2_xo9ac_WRbQJsY2rbMVMsvXllEg/exec';
-    
-    console.log('Sending data to GAS:', formData);
+    // --- OPTION 1: Supabase DB (New & Reliable) ---
+    const { error } = await supabase
+      .from('worship_records')
+      .insert([
+        {
+          date: formData.date,
+          family_name: formData.familyName,
+          content: formData.content,
+          prayer: formData.prayer,
+        }
+      ]);
 
-    const response = await fetch(GAS_WEB_APP_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-      redirect: 'follow', // Ensure we follow Google's internal redirection
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('GAS Error Detail:', errorText);
-      throw new Error(`GAS API responded with status: ${response.status}`);
+    if (error) {
+      console.error('Supabase Error:', error);
+      throw new Error(`DB Error: ${error.message}`);
     }
 
-    const resultText = await response.text();
-    console.log('GAS Success Response:', resultText);
-    
     return NextResponse.json({ message: "기록이 완료되었습니다. 평안한 주일 되세요!" });
 
-    // --- OPTION 2: Native Google Sheets API (Premium) ---
-    // Requires: npm install googleapis
-    /*
-    const { google } = require('googleapis');
-    const auth = new google.auth.GoogleAuth({
-      credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-    const sheets = google.sheets({ version: 'v4', auth });
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.NEXT_PUBLIC_SPREADSHEET_ID,
-      range: 'Data!A:E',
-      valueInputOption: 'RAW',
-      requestBody: {
-        values: [[formData.date, formData.familyName, formData.content, formData.prayer, new Date().toISOString()]],
-      },
-    });
-    return NextResponse.json({ message: "기록이 완료되었습니다. 평안한 주일 되세요!" });
-    */
-
-    // For now, let's simulate success to keep the UI functional
-    console.log('Received worship data:', formData);
-    return NextResponse.json({ 
-      message: "기록이 성공적으로 완료되었습니다. 평안한 주일 되세요!" 
-    });
-
-  } catch (error) {
+  } catch (error: any) {
     console.error('API Error:', error);
-    return NextResponse.json({ message: "전송 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json({ message: error.message || "전송 중 오류가 발생했습니다." }, { status: 500 });
   }
 }
