@@ -11,29 +11,33 @@ export async function GET(request: NextRequest) {
   const count = searchParams.get('count');
   const startDate = searchParams.get('startDate');
 
-  try {
-    let query = supabase
-      .from('worship_records')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (startDate) {
-      query = query.gte('date', startDate);
-    }
+  // If fetching records for dashboard
+  if (count || startDate) {
+    try {
+      let query = supabase
+        .from('worship_records')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (startDate) {
+        query = query.gte('date', startDate);
+      }
 
-    if (count) {
-      query = query.limit(parseInt(count));
-    }
+      if (count) {
+        query = query.limit(parseInt(count));
+      }
 
-    const { data, error } = await query;
-    
-    if (error) throw error;
-    return NextResponse.json({ records: data });
-  } catch (error) {
-    console.error("Error fetching records:", error);
-    return NextResponse.json({ records: [] });
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      return NextResponse.json({ records: data || [] });
+    } catch (error) {
+      console.error("Error fetching records:", error);
+      return NextResponse.json({ records: [] });
+    }
   }
 
+  // Default: Fetch links for main page
   const blogUrl = `https://blog.naver.com/${NAVER_BLOG_ID}`;
   let youtubeUrl = `https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}`;
   let sermonTitle = "이번 주 주일 설교말씀";
@@ -46,10 +50,10 @@ export async function GET(request: NextRequest) {
       const text = await response.text();
       const entryMatch = text.split('<entry>')[1];
       if (entryMatch) {
-         const entryLink = entryMatch.match(/<link rel="alternate" href="([^"]+)"\/>/);
-         const entryTitle = entryMatch.match(/<title>([^<]+)<\/title>/);
-         if (entryLink) youtubeUrl = entryLink[1];
-         if (entryTitle) sermonTitle = entryTitle[1];
+         const entryLinkMatch = entryMatch.match(/<link rel="alternate" href="([^"]+)"\/>/);
+         const entryTitleMatch = entryMatch.match(/<title>([^<]+)<\/title>/);
+         if (entryLinkMatch && entryLinkMatch[1]) youtubeUrl = entryLinkMatch[1];
+         if (entryTitleMatch && entryTitleMatch[1]) sermonTitle = entryTitleMatch[1];
       }
     }
   } catch (error) {
