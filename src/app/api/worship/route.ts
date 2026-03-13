@@ -9,21 +9,29 @@ import { supabase } from '../../../lib/supabase';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const count = searchParams.get('count');
+  const startDate = searchParams.get('startDate');
 
-  if (count) {
-    try {
-      const { data, error } = await supabase
-        .from('worship_records')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(parseInt(count));
-      
-      if (error) throw error;
-      return NextResponse.json({ records: data });
-    } catch (error) {
-      console.error("Error fetching records:", error);
-      return NextResponse.json({ records: [] });
+  try {
+    let query = supabase
+      .from('worship_records')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (startDate) {
+      query = query.gte('date', startDate);
     }
+
+    if (count) {
+      query = query.limit(parseInt(count));
+    }
+
+    const { data, error } = await query;
+    
+    if (error) throw error;
+    return NextResponse.json({ records: data });
+  } catch (error) {
+    console.error("Error fetching records:", error);
+    return NextResponse.json({ records: [] });
   }
 
   const blogUrl = `https://blog.naver.com/${NAVER_BLOG_ID}`;

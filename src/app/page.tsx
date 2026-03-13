@@ -33,6 +33,7 @@ export default function WorshipPage() {
   const [lastSubmission, setLastSubmission] = useState<any>(null);
   const [recentRecords, setRecentRecords] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState<'form' | 'success' | 'dashboard'>('form');
+  const [dashFilter, setDashFilter] = useState<'weekly' | 'monthly' | 'all'>('weekly');
 
   useEffect(() => {
     async function loadLinks() {
@@ -101,14 +102,32 @@ export default function WorshipPage() {
     setShowDirectInput(false);
   };
 
-  const loadDashboard = async () => {
+  const getStartDate = (filter: 'weekly' | 'monthly' | 'all') => {
+    const now = new Date();
+    if (filter === 'weekly') {
+      const day = now.getDay(); // 0 is Sunday
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
+      const monday = new Date(now.setDate(diff));
+      monday.setHours(0, 0, 0, 0);
+      return monday.toISOString().split('T')[0];
+    } else if (filter === 'monthly') {
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      return firstDay.toISOString().split('T')[0];
+    }
+    return undefined;
+  };
+
+  const loadDashboard = async (filter: 'weekly' | 'monthly' | 'all' = 'weekly') => {
     setIsSubmitting(true);
+    setDashFilter(filter);
     const { getRecentRecords } = await import('../lib/worship/service');
-    const records = await getRecentRecords();
+    const startDate = getStartDate(filter);
+    const records = await getRecentRecords(startDate);
     setRecentRecords(records);
     setViewMode('dashboard');
     setIsSubmitting(false);
   };
+
 
   if (viewMode === 'success') {
     return (
@@ -133,7 +152,7 @@ export default function WorshipPage() {
           </div>
 
           <div className="success-actions">
-            <button onClick={loadDashboard} className="dashboard-btn">
+            <button onClick={() => loadDashboard('weekly')} className="dashboard-btn">
               📊 예배현황 보러가기
             </button>
             <button onClick={handleReset} className="reset-btn-link">
@@ -151,19 +170,38 @@ export default function WorshipPage() {
         <div className="worship-card dashboard-card">
           <header className="dashboard-header">
             <h2>🏠 가정예배 현황</h2>
-            <p>우리 교회 가정들이 드린 은혜의 기록입니다.</p>
+            <div className="dashboard-tabs">
+              <button 
+                className={`tab-btn ${dashFilter === 'weekly' ? 'active' : ''}`}
+                onClick={() => loadDashboard('weekly')}
+              >이번 주</button>
+              <button 
+                className={`tab-btn ${dashFilter === 'monthly' ? 'active' : ''}`}
+                onClick={() => loadDashboard('monthly')}
+              >이번 달</button>
+              <button 
+                className={`tab-btn ${dashFilter === 'all' ? 'active' : ''}`}
+                onClick={() => loadDashboard('all')}
+              >전체</button>
+            </div>
           </header>
 
           <div className="dashboard-list">
-            {recentRecords.map((record, index) => (
-              <div key={record.id || index} className="dashboard-item">
-                <div className="item-main">
-                  <span className="item-family">{record.family_name}</span>
-                  <span className="item-date">{record.date}</span>
+            {recentRecords.length > 0 ? (
+              recentRecords.map((record, index) => (
+                <div key={record.id || index} className="dashboard-item">
+                  <div className="item-main">
+                    <span className="item-family">{record.family_name}</span>
+                    <span className="item-date">{record.date}</span>
+                  </div>
+                  {record.prayer && <p className="item-prayer">🙏 {record.prayer}</p>}
                 </div>
-                {record.prayer && <p className="item-prayer">🙏 {record.prayer}</p>}
+              ))
+            ) : (
+              <div className="empty-state">
+                <p>아직 기록된 예배가 없습니다. 🙏</p>
               </div>
-            ))}
+            )}
           </div>
 
           <button onClick={handleReset} className="back-btn">
