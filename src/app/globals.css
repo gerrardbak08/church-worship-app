@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f3f7f4;
+  --foreground: #1f2d28;
+  --color-ink: #1f2d28;
+  --color-ink-soft: #5f6d67;
+  --color-line: #d8e2db;
+  --color-accent: #71aa8d;
+  --color-accent-soft: #e8f3ed;
+  --color-accent-strong: #2f7a53;
+  --color-sky: #ebf2fb;
+  --font-sans-stack: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --font-title-stack: "MaruBuri", "Nanum Myeongjo", "Noto Serif KR", serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans-stack);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, #e9f3ec 0%, transparent 40%),
+    radial-gradient(circle at 90% 100%, #e6f0ff 0%, transparent 36%),
+    linear-gradient(180deg, #f9fbf9 0%, #eff5f2 100%);
+  color: var(--color-ink);
+  font-family: var(--font-sans-stack);
+}
+
+.font-title {
+  font-family: var(--font-title-stack);
+  letter-spacing: -0.01em;
+}
+
+.card-surface {
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(52, 78, 62, 0.08);
+}
+
+@media (max-width: 640px) {
+  .card-surface {
+    border-radius: 1rem;
+  }
 }

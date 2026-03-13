@@ -1,0 +1,190 @@
+:root {
+  --worship-primary: #6b8e23;
+  --worship-secondary: #556b2f;
+  --worship-accent: #8fb339;
+  --worship-bg: #f8fafc;
+  --worship-card-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+  --shadow-strong: 0 20px 40px rgba(107, 142, 35, 0.15);
+}
+
+.worship-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f4f0 0%, #e8eee8 100%);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.worship-card {
+  background: var(--worship-card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  border-radius: 32px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.worship-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.worship-logo {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.worship-header h1 {
+  color: var(--worship-primary);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.worship-header p {
+  color: #64748b;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.worship-links {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.worship-link-btn {
+  flex: 1;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 16px;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-youtube {
+  background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%);
+  box-shadow: 0 4px 15px rgba(204, 0, 0, 0.2);
+}
+
+.btn-blog {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+}
+
+.worship-link-btn:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.1);
+}
+
+.worship-link-btn:active {
+  transform: scale(0.96);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.custom-input, .custom-select, .custom-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  font-size: 16px;
+  background: white;
+  transition: all 0.3s ease;
+  color: #1e293b;
+}
+
+.custom-input:focus, .custom-select:focus, .custom-textarea:focus {
+  outline: none;
+  border-color: var(--worship-primary);
+  box-shadow: 0 0 0 4px rgba(107, 142, 35, 0.1);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--worship-primary) 0%, var(--worship-secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-strong);
+  margin-top: 12px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(107, 142, 35, 0.25);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+  background: #cbd5e1;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.status-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  min-height: 24px;
+  color: #64748b;
+}
+
+.success-text {
+  color: #059669;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .worship-card {
+    padding: 30px 20px;
+    border-radius: 24px;
+  }
+}
