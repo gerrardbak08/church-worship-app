@@ -29,6 +29,7 @@ export default function WorshipPage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showDirectInput, setShowDirectInput] = useState<boolean>(false);
   const [directFamilyName, setDirectFamilyName] = useState<string>('');
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadLinks() {
@@ -68,8 +69,8 @@ export default function WorshipPage() {
 
     try {
       const submissionData = { ...formData, familyName: finalFamilyName };
-      const result = await submitWorshipForm(submissionData);
-      setStatus(result);
+      await submitWorshipForm(submissionData);
+      setSubmitted(true);
       setFormData(prev => ({
         ...prev,
         content: '',
@@ -82,6 +83,38 @@ export default function WorshipPage() {
       setIsSubmitting(false);
     }
   };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setStatus('');
+    setFormData(prev => ({
+      ...prev,
+      date: new Date().toISOString().split('T')[0],
+      familyName: ''
+    }));
+    setShowDirectInput(false);
+  };
+
+  if (submitted) {
+    return (
+      <div className={`worship-container ${notoLinks.className}`}>
+        <div className="worship-card success-card">
+          <div className="success-icon">✨</div>
+          <h2 className="success-title">기록이 완료되었습니다!</h2>
+          <p className="success-description">
+            가족과 함께한 소중한 시간들이<br />
+            아름답게 기록되었습니다.
+          </p>
+          <div className="success-blessing">
+            🌿 "평안을 너희에게 끼치노니 곧 나의 평안을 너희에게 주노라"
+          </div>
+          <button onClick={handleReset} className="reset-btn">
+            추가로 기록하기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`worship-container ${notoLinks.className}`}>

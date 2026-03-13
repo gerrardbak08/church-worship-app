@@ -188,3 +188,67 @@
     border-radius: 24px;
   }
 }
+
+/* Success View Styles */
+.success-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.success-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.success-title {
+  color: var(--worship-primary);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.success-description {
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.success-blessing {
+  background: rgba(107, 142, 35, 0.05);
+  padding: 20px;
+  border-radius: 20px;
+  color: var(--worship-secondary);
+  font-size: 14px;
+  font-style: italic;
+  margin: 10px 0;
+  border-left: 4px solid var(--worship-primary);
+}
+
+.reset-btn {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  color: var(--worship-primary);
+  border: 2px solid var(--worship-primary);
+  border-radius: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.reset-btn:hover {
+  background: var(--worship-primary);
+  color: white;
+}
