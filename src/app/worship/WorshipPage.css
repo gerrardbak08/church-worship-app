@@ -210,6 +210,153 @@
   50% { transform: translateY(-10px); }
 }
 
+/* Success Summary Box */
+.sumamry-box {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  text-align: left;
+  border-left: 4px solid var(--accent-light);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  animation: slideUp 0.5s ease forwards;
+}
+
+.summary-item {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-item strong {
+  color: var(--primary-color);
+  margin-right: 0.5rem;
+}
+
+/* Success Actions */
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.dashboard-btn {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.reset-btn-link {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+/* Dashboard Card */
+.dashboard-card {
+  max-width: 500px;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 2rem;
+}
+
+.dashboard-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dashboard-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+.dashboard-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  text-align: left;
+}
+
+.item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.item-family {
+  font-weight: 700;
+  color: #333;
+}
+
+.item-date {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.item-prayer {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+  border-top: 1px dashed #eee;
+  padding-top: 0.5rem;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .success-title {
   color: var(--worship-primary);
   font-size: 24px;

@@ -30,6 +30,9 @@ export default function WorshipPage() {
   const [showDirectInput, setShowDirectInput] = useState<boolean>(false);
   const [directFamilyName, setDirectFamilyName] = useState<string>('');
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [lastSubmission, setLastSubmission] = useState<any>(null);
+  const [recentRecords, setRecentRecords] = useState<any[]>([]);
+  const [viewMode, setViewMode] = useState<'form' | 'success' | 'dashboard'>('form');
 
   useEffect(() => {
     async function loadLinks() {
@@ -70,7 +73,9 @@ export default function WorshipPage() {
     try {
       const submissionData = { ...formData, familyName: finalFamilyName };
       await submitWorshipForm(submissionData);
+      setLastSubmission(submissionData);
       setSubmitted(true);
+      setViewMode('success');
       setFormData(prev => ({
         ...prev,
         content: '',
@@ -86,6 +91,7 @@ export default function WorshipPage() {
 
   const handleReset = () => {
     setSubmitted(false);
+    setViewMode('form');
     setStatus('');
     setFormData(prev => ({
       ...prev,
@@ -95,12 +101,28 @@ export default function WorshipPage() {
     setShowDirectInput(false);
   };
 
-  if (submitted) {
+  const loadDashboard = async () => {
+    setIsSubmitting(true);
+    const { getRecentRecords } = await import('../lib/worship/service');
+    const records = await getRecentRecords();
+    setRecentRecords(records);
+    setViewMode('dashboard');
+    setIsSubmitting(false);
+  };
+
+  if (viewMode === 'success') {
     return (
       <div className={`worship-container ${notoLinks.className}`}>
         <div className="worship-card success-card">
           <div className="success-icon">✨</div>
           <h2 className="success-title">기록이 완료되었습니다!</h2>
+          
+          <div className="sumamry-box">
+             <div className="summary-item"><strong>가정:</strong> {lastSubmission.familyName}</div>
+             <div className="summary-item"><strong>날짜:</strong> {lastSubmission.date}</div>
+             {lastSubmission.prayer && <div className="summary-item"><strong>기도:</strong> {lastSubmission.prayer}</div>}
+          </div>
+
           <p className="success-description">
             가족과 함께한 소중한 시간들이<br />
             아름답게 기록되었습니다.
@@ -109,8 +131,43 @@ export default function WorshipPage() {
             🌿 "빌립보서 2장 13~14절"<br />
             너희 안에서 행하시는 이는 하나님이시니 자기의 기쁘신 뜻을 위하여 너희에게 소원을 두고 행하게 하시나니 모든 일을 원망과 시비가 없이 하라
           </div>
-          <button onClick={handleReset} className="reset-btn">
-            추가로 기록하기
+
+          <div className="success-actions">
+            <button onClick={loadDashboard} className="dashboard-btn">
+              📊 예배현황 보러가기
+            </button>
+            <button onClick={handleReset} className="reset-btn-link">
+              다른 기록 남기기
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (viewMode === 'dashboard') {
+    return (
+      <div className={`worship-container ${notoLinks.className}`}>
+        <div className="worship-card dashboard-card">
+          <header className="dashboard-header">
+            <h2>🏠 가정예배 현황</h2>
+            <p>우리 교회 가정들이 드린 은혜의 기록입니다.</p>
+          </header>
+
+          <div className="dashboard-list">
+            {recentRecords.map((record, index) => (
+              <div key={record.id || index} className="dashboard-item">
+                <div className="item-main">
+                  <span className="item-family">{record.family_name}</span>
+                  <span className="item-date">{record.date}</span>
+                </div>
+                {record.prayer && <p className="item-prayer">🙏 {record.prayer}</p>}
+              </div>
+            ))}
+          </div>
+
+          <button onClick={handleReset} className="back-btn">
+            돌아가기
           </button>
         </div>
       </div>

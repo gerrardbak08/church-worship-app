@@ -41,3 +41,18 @@ export async function submitWorshipForm(formData: WorshipFormData): Promise<stri
     throw error;
   }
 }
+
+/**
+ * Fetches recent worship records for the dashboard.
+ */
+export async function getRecentRecords(): Promise<any[]> {
+  try {
+    const response = await fetch('/api/worship?count=10');
+    if (!response.ok) throw new Error('Failed to fetch records');
+    const data = await response.json();
+    return data.records || [];
+  } catch (error) {
+    console.error("Error fetching recent records:", error);
+    return [];
+  }
+}

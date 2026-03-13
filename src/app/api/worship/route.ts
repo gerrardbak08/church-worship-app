@@ -6,7 +6,26 @@ import { supabase } from '../../../lib/supabase';
  * GET /api/worship
  * Fetches latest YouTube and Blog information server-side to bypass CORS.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const count = searchParams.get('count');
+
+  if (count) {
+    try {
+      const { data, error } = await supabase
+        .from('worship_records')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(parseInt(count));
+      
+      if (error) throw error;
+      return NextResponse.json({ records: data });
+    } catch (error) {
+      console.error("Error fetching records:", error);
+      return NextResponse.json({ records: [] });
+    }
+  }
+
   const blogUrl = `https://blog.naver.com/${NAVER_BLOG_ID}`;
   let youtubeUrl = `https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}`;
   let sermonTitle = "이번 주 주일 설교말씀";
