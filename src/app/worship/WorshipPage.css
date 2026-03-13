@@ -18,10 +18,8 @@
 }
 
 body {
-  background: var(--bg-color);
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(191, 161, 93, 0.03) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(15, 23, 42, 0.03) 0%, transparent 40%);
+  background: #f8fafc url('/worship-bg.png') no-repeat center center fixed;
+  background-size: cover;
   color: var(--primary-color);
   overflow-x: hidden;
 }
@@ -48,13 +46,6 @@ body {
   overflow: hidden;
 }
 
-/* Elegant Church Logo */
-.worship-logo {
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  opacity: 0.9;
-}
 
 .worship-header {
   margin-bottom: 3rem;
