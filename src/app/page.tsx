@@ -148,12 +148,15 @@ export default function WorshipPage() {
           </div>
 
           <p className="success-description">
-            가족과 함께한 소중한 시간들이 아름답게 기록되었습니다.
+            가족과 함께한 소중한 시간들이<br />
+            아름답게 기록되었습니다.
           </p>
           
           <div className="success-blessing">
-            빌립보서 2장 13~14절<br />
-            너희 안에서 행하시는 이는 하나님이시니 자기의 기쁘신 뜻을 위하여 너희에게 소원을 두고 행하게 하시나니 모든 일을 원망과 시비가 없이 하라
+            <span className="blessing-reference">빌립보서 2장 13~14절</span>
+            <p className="blessing-text">
+              너희 안에서 행하시는 이는 하나님이시니 자기의 기쁘신 뜻을 위하여 너희에게 소원을 두고 행하게 하시나니 모든 일을 원망과 시비가 없이 하라
+            </p>
           </div>
 
           <div className="success-actions">
@@ -222,7 +225,7 @@ export default function WorshipPage() {
       <div className="worship-card">
         <header className="worship-header">
           <h1 className={lora.className}>사랑과 평안의 교회</h1>
-          <p>가족과 함께하는 은혜로운 예배 기록</p>
+          <p className="worship-subtitle">가족과 함께하는 은혜로운 예배 기록</p>
         </header>
 
         <section className="worship-links">
