@@ -48,17 +48,22 @@ export async function POST(request: NextRequest) {
     const formData = await request.json();
     
     // --- OPTION 1: Google Apps Script Web App (Easiest transition) ---
-    // If you have your original code.gs deployed as a Web App, 
-    // you can simply proxy the request to it.
-    /*
-    const GAS_WEB_APP_URL = 'YOUR_DEPLOYED_GAS_URL';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxllpwuoZ5xTxpTBt3Fc31KxPGmcEYxWXVDh3iZaF2_xo9ac_WRbQJsY2rbMVMsvXllEg/exec';
+    
     const response = await fetch(GAS_WEB_APP_URL, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(formData)
     });
-    const result = await response.text();
-    return NextResponse.json({ message: result });
-    */
+
+    if (!response.ok) {
+      throw new Error(`GAS API responded with status: ${response.status}`);
+    }
+
+    const resultText = await response.text();
+    return NextResponse.json({ message: resultText || "기록이 완료되었습니다." });
 
     // --- OPTION 2: Native Google Sheets API (Premium) ---
     // Requires: npm install googleapis
