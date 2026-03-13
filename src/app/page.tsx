@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Noto_Sans_KR } from 'next/font/google';
+import { Noto_Sans_KR, Lora } from 'next/font/google';
 import { WorshipFormData, WorshipLinks, FAMILY_OPTIONS } from '../types/worship';
 import { getLatestLinks, submitWorshipForm } from '../lib/worship/service';
 import './worship/WorshipPage.css';
@@ -9,6 +9,11 @@ import './worship/WorshipPage.css';
 const notoLinks = Noto_Sans_KR({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
+});
+
+const lora = Lora({
+  subsets: ['latin'],
+  weight: ['400', '700'],
 });
 
 export default function WorshipPage() {
@@ -134,20 +139,20 @@ export default function WorshipPage() {
       <div className={`worship-container ${notoLinks.className}`}>
         <div className="worship-card success-card">
           <div className="success-icon">✨</div>
-          <h2 className="success-title">기록이 완료되었습니다!</h2>
+          <h2 className={`success-title ${lora.className}`}>기록이 완료되었습니다!</h2>
           
           <div className="sumamry-box">
-             <div className="summary-item"><strong>가정:</strong> {lastSubmission.familyName}</div>
-             <div className="summary-item"><strong>날짜:</strong> {lastSubmission.date}</div>
-             {lastSubmission.prayer && <div className="summary-item"><strong>기도:</strong> {lastSubmission.prayer}</div>}
+             <div className="summary-item"><strong>제출 가정</strong> {lastSubmission.familyName}</div>
+             <div className="summary-item"><strong>예배 일자</strong> {lastSubmission.date}</div>
+             {lastSubmission.prayer && <div className="summary-item"><strong>기도 제목</strong> {lastSubmission.prayer}</div>}
           </div>
 
           <p className="success-description">
-            가족과 함께한 소중한 시간들이<br />
-            아름답게 기록되었습니다.
+            가족과 함께한 소중한 시간들이 아름답게 기록되었습니다.
           </p>
-          <div className="success-blessing" style={{ whiteSpace: 'pre-line', fontSize: '0.95rem', lineHeight: '1.6' }}>
-            🌿 "빌립보서 2장 13~14절"<br />
+          
+          <div className="success-blessing">
+            빌립보서 2장 13~14절<br />
             너희 안에서 행하시는 이는 하나님이시니 자기의 기쁘신 뜻을 위하여 너희에게 소원을 두고 행하게 하시나니 모든 일을 원망과 시비가 없이 하라
           </div>
 
@@ -217,13 +222,13 @@ export default function WorshipPage() {
       <div className="worship-card">
         <header className="worship-header">
           <div className="worship-logo">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L4 7V22H9V16H15V22H20V7L12 2Z" fill="var(--primary-color)" fillOpacity="0.1" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 2V12" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round"/>
-              <path d="M10 5L14 5" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round"/>
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L4 7V22H9V16H15V22H20V7L12 2Z" fill="var(--primary-color)" fillOpacity="0.05" stroke="var(--primary-color)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2V12" stroke="var(--primary-color)" strokeWidth="1.2" strokeLinecap="round"/>
+              <path d="M10 5L14 5" stroke="var(--primary-color)" strokeWidth="1.2" strokeLinecap="round"/>
             </svg>
           </div>
-          <h1>사랑과 평안의 교회</h1>
+          <h1 className={lora.className}>사랑과 평안의 교회</h1>
           <p>가족과 함께하는 은혜로운 예배 기록</p>
         </header>
 
