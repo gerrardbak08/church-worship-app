@@ -1,0 +1,22 @@
+{
+  "project": "unix",
+  "level": "dynamic",
+  "stack": {
+    "frontend": "Next.js 14+, TypeScript, Tailwind CSS",
+    "state": "Zustand",
+    "data": "TanStack Query",
+    "backend": "bkend.ai BaaS"
+  },
+  "pdca": {
+    "currentFeature": "user-auth",
+    "currentPhase": "plan",
+    "features": [
+      {
+        "name": "user-auth",
+        "phase": "plan",
+        "startedAt": "2026-03-12"
+      }
+    ]
+  },
+  "createdAt": "2026-03-12"
+}
