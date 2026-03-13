@@ -105,8 +105,9 @@ export default function WorshipPage() {
             가족과 함께한 소중한 시간들이<br />
             아름답게 기록되었습니다.
           </p>
-          <div className="success-blessing">
-            🌿 "평안을 너희에게 끼치노니 곧 나의 평안을 너희에게 주노라"
+          <div className="success-blessing" style={{ whiteSpace: 'pre-line', fontSize: '0.95rem', lineHeight: '1.6' }}>
+            🌿 "빌립보서 2장 13~14절"<br />
+            너희 안에서 행하시는 이는 하나님이시니 자기의 기쁘신 뜻을 위하여 너희에게 소원을 두고 행하게 하시나니 모든 일을 원망과 시비가 없이 하라
           </div>
           <button onClick={handleReset} className="reset-btn">
             추가로 기록하기
