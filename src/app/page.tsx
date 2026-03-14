@@ -138,7 +138,7 @@ export default function WorshipPage() {
     return (
       <div className={`worship-container ${notoLinks.className}`}>
         <div className="worship-card success-card">
-          <div className="success-icon">✨</div>
+          <div className="success-icon"></div>
           <h2 className={`success-title ${lora.className}`}>기록이 완료되었습니다!</h2>
           
           <div className="sumamry-box">
@@ -161,7 +161,7 @@ export default function WorshipPage() {
 
           <div className="success-actions">
             <button onClick={() => loadDashboard('weekly')} className="dashboard-btn">
-              📊 예배현황 보러가기
+              예배현황 보러가기
             </button>
             <button onClick={handleReset} className="reset-btn-link">
               다른 기록 남기기
@@ -177,7 +177,7 @@ export default function WorshipPage() {
       <div className={`worship-container ${notoLinks.className}`}>
         <div className="worship-card dashboard-card">
           <header className="dashboard-header">
-            <h2>🏠 가정예배 현황</h2>
+            <h2>가정예배 현황</h2>
             <div className="dashboard-tabs">
               <button 
                 className={`tab-btn ${dashFilter === 'weekly' ? 'active' : ''}`}
@@ -202,12 +202,12 @@ export default function WorshipPage() {
                     <span className="item-family">{record.family_name}</span>
                     <span className="item-date">{record.date}</span>
                   </div>
-                  {record.prayer && <p className="item-prayer">🙏 {record.prayer}</p>}
+                  {record.prayer && <p className="item-prayer">{record.prayer}</p>}
                 </div>
               ))
             ) : (
               <div className="empty-state">
-                <p>아직 기록된 예배가 없습니다. 🙏</p>
+                <p>아직 기록된 예배가 없습니다.</p>
               </div>
             )}
           </div>
@@ -230,11 +230,11 @@ export default function WorshipPage() {
 
         <section className="worship-links">
           <a href={links.youtubeUrl} target="_blank" rel="noopener noreferrer" className="worship-link-btn btn-youtube">
-            <span>📽 설교말씀 보기</span>
+            <span>설교말씀 보기</span>
             <small style={{ fontSize: '10px', opacity: 0.8 }}>{links.sermonTitle}</small>
           </a>
           <a href={links.blogUrl} target="_blank" rel="noopener noreferrer" className="worship-link-btn btn-blog">
-            <span>📝 교회 소식</span>
+            <span>교회 소식</span>
             <small style={{ fontSize: '10px', opacity: 0.8 }}>네이버 블로그</small>
           </a>
         </section>
