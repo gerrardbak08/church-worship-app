@@ -90,8 +90,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "기록이 완료되었습니다. 평안한 주일 되세요!" });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "전송 중 오류가 발생했습니다.";
     console.error('API Error:', error);
-    return NextResponse.json({ message: error.message || "전송 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

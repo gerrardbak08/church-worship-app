@@ -31,11 +31,21 @@ docs/
   04-report/    # PDCA Completion Reports
 ```
 
+## Design System (Figma)
+
+- **Tokens**: Semantic colors in `src/app/globals.css` (e.g., `--color-accent: #71aa8d`).
+- **Typography**: Sans (Pretendard/Noto Sans KR), Title (MaruBuri/Nanum Myeongjo).
+- **Styling**: Tailwind CSS v4 primary, `.card-surface` for complex patterns.
+- **Components**: UI primitives in `src/components/ui`, Feature components in `src/components/features`.
+- **Icons**: Preferred over emojis (Lucide recommended).
+
 ## Rules
 
 - Use `src/lib/bkend.ts` for all bkend.ai API calls — never call the API directly
 - Keep components in `components/ui/` under 200 lines
 - Use TanStack Query for all server data; Zustand for UI state only
+- **Figma Integration**: Map Figma styles to `globals.css` tokens. Use `.font-title` for serif headings.
+- **Responsiveness**: Mobile-first via Tailwind.
 - All env vars must be prefixed `NEXT_PUBLIC_` for client access or kept server-side
 - Never commit `.env.local`
 

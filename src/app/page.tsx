@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Noto_Sans_KR, Lora } from 'next/font/google';
-import { WorshipFormData, WorshipLinks, FAMILY_OPTIONS } from '../types/worship';
+import { WorshipFormData, WorshipLinks, FAMILY_OPTIONS, WorshipRecord } from '../types/worship';
 import { getLatestLinks, submitWorshipForm } from '../lib/worship/service';
 import './worship/WorshipPage.css';
 
@@ -35,8 +35,8 @@ export default function WorshipPage() {
   const [showDirectInput, setShowDirectInput] = useState<boolean>(false);
   const [directFamilyName, setDirectFamilyName] = useState<string>('');
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [lastSubmission, setLastSubmission] = useState<any>(null);
-  const [recentRecords, setRecentRecords] = useState<any[]>([]);
+  const [lastSubmission, setLastSubmission] = useState<WorshipFormData | null>(null);
+  const [recentRecords, setRecentRecords] = useState<WorshipRecord[]>([]);
   const [viewMode, setViewMode] = useState<'form' | 'success' | 'dashboard'>('form');
   const [dashFilter, setDashFilter] = useState<'weekly' | 'monthly' | 'all'>('weekly');
 
@@ -74,7 +74,7 @@ export default function WorshipPage() {
     }
 
     setIsSubmitting(true);
-    setStatus('🕊 은혜의 소식을 전송하고 있습니다...');
+    setStatus('은혜의 소식을 전송하고 있습니다...');
 
     try {
       const submissionData = { ...formData, familyName: finalFamilyName };
@@ -142,9 +142,9 @@ export default function WorshipPage() {
           <h2 className={`success-title ${lora.className}`}>기록이 완료되었습니다!</h2>
           
           <div className="sumamry-box">
-             <div className="summary-item"><strong>제출 가정</strong> {lastSubmission.familyName}</div>
-             <div className="summary-item"><strong>예배 일자</strong> {lastSubmission.date}</div>
-             {lastSubmission.prayer && <div className="summary-item"><strong>기도 제목</strong> {lastSubmission.prayer}</div>}
+             <div className="summary-item"><strong>제출 가정</strong> {lastSubmission?.familyName}</div>
+             <div className="summary-item"><strong>예배 일자</strong> {lastSubmission?.date}</div>
+             {lastSubmission?.prayer && <div className="summary-item"><strong>기도 제목</strong> {lastSubmission.prayer}</div>}
           </div>
 
           <p className="success-description">
@@ -196,10 +196,10 @@ export default function WorshipPage() {
 
           <div className="dashboard-list">
             {recentRecords.length > 0 ? (
-              recentRecords.map((record, index) => (
-                <div key={record.id || index} className="dashboard-item">
+              recentRecords.map((record) => (
+                <div key={record.id} className="dashboard-item">
                   <div className="item-main">
-                    <span className="item-family">{record.family_name}</span>
+                    <span className="item-family">{record.familyName}</span>
                     <span className="item-date">{record.date}</span>
                   </div>
                   {record.prayer && <p className="item-prayer">{record.prayer}</p>}

@@ -1,17 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
+/* ─────────────────────────────────────────
+   Nature-Inspired Premium Design System
+   Concept: 새벽 숲, 이슬, 생명력
+───────────────────────────────────────── */
 :root {
-  --primary-color: #1e293b; /* 정갈한 미드나잇 네이비 */
-  --secondary-color: #64748b; /* 부드러운 슬레이트 그레이 */
-  --accent-color: #c5a368; /* 은은한 샴페인 골드 */
-  --bg-overlay: rgba(248, 250, 252, 0.85); /* 부드러운 아이보리 틴트 */
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --text-main: #1e293b;
-  --text-light: #64748b;
-  --card-shadow: 0 20px 50px rgba(30, 41, 59, 0.05);
+  /* Nature Color Tokens */
+  --forest-deep:    #1a2e1f;   /* 깊은 숲 */
+  --forest-mid:     #2d5a3d;   /* 숲 중층 */
+  --moss:           #4a7c59;   /* 이끼 */
+  --sage:           #71aa8d;   /* 세이지 잎 */
+  --sage-light:     #9ec4b0;   /* 연한 세이지 */
+  --dew:            #e8f3ed;   /* 이슬 맺힌 잎 */
+  --morning-mist:   #f4f8f5;   /* 새벽 안개 */
+  --parchment:      #faf8f4;   /* 양피지 크림 */
+  --bark:           #6b4c2a;   /* 나무 껍질 */
+  --earth:          #8c6642;   /* 흙 */
+
+  /* Semantic Aliases */
+  --text-primary:   var(--forest-deep);
+  --text-secondary: var(--moss);
+  --text-muted:     var(--sage-light);
+  --accent:         var(--sage);
+  --accent-hover:   var(--moss);
+  --surface:        rgba(250, 248, 244, 0.92);
+  --surface-tint:   rgba(232, 243, 237, 0.6);
+  --border-soft:    rgba(113, 170, 141, 0.2);
+  --border-dew:     rgba(113, 170, 141, 0.35);
+
+  /* Shadows (green-tinted depth) */
+  --shadow-sm:  0 2px 12px rgba(26, 46, 31, 0.06);
+  --shadow-md:  0 8px 32px rgba(26, 46, 31, 0.10);
+  --shadow-lg:  0 20px 60px rgba(26, 46, 31, 0.14);
+  --shadow-glow: 0 0 0 3px rgba(113, 170, 141, 0.18);
+
+  /* Radii */
+  --radius-card:   2.5rem;
+  --radius-input:  1.25rem;
+  --radius-btn:    1.5rem;
+  --radius-pill:   100px;
+  --radius-badge:  0.75rem;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ─────────────────────────────────────────
+   Base & Background
+───────────────────────────────────────── */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -19,87 +56,159 @@
 }
 
 body {
-  background: #f8fafc url('/worship-bg.png') no-repeat center center fixed;
-  background-size: cover;
-  color: var(--text-main);
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 0%,   rgba(113, 170, 141, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 90% 100%,  rgba(74, 124, 89, 0.12)  0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 50% 50%,  rgba(244, 248, 245, 1)   0%, rgba(232, 243, 237, 1) 100%);
+  color: var(--text-primary);
   overflow-x: hidden;
-  transition: background 1s ease;
+  min-height: 100vh;
+  font-family: "Pretendard", "SUIT", "Noto Sans KR", sans-serif;
+}
+
+/* 배경 이미지가 있을 때 자연스럽게 오버레이 */
+body[style*="worship-bg"] {
+  background-image: url('/worship-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center, transparent 0%, rgba(248, 250, 252, 0.2) 100%);
-  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(232, 243, 237, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(113, 170, 141, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
+/* ─────────────────────────────────────────
+   Layout
+───────────────────────────────────────── */
 .worship-container {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 4rem 1.5rem;
+  align-items: flex-start;
+  padding: 2rem 1rem 4rem;
   min-height: 100vh;
 }
 
-.worship-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid var(--glass-border);
-  border-radius: 40px;
-  padding: 3.5rem 2rem;
-  width: 92%;
-  max-width: 540px;
-  box-shadow: var(--card-shadow);
-  text-align: center;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  /* iOS Safari Corner Fix */
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: -webkit-radial-gradient(white, black);
-  overflow: hidden;
-}
-
-@media (min-width: 768px) {
-  .worship-card {
-    padding: 4.5rem 3.5rem;
-    width: 100%;
+@media (min-width: 640px) {
+  .worship-container {
+    align-items: center;
+    padding: 4rem 1.5rem;
   }
 }
 
-
-.worship-header {
-  margin-bottom: 3rem;
+/* ─────────────────────────────────────────
+   Card
+───────────────────────────────────────── */
+.worship-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  padding: 2.5rem 1.5rem;
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: riseFromMist 0.9s var(--ease-spring) both;
+
+  /* 카드 상단 자연광 하이라이트 */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.8) 40%,
+      rgba(113, 170, 141, 0.4) 60%,
+      transparent 100%
+    );
+  }
+
+  /* 카드 내부 미묘한 잎맥 텍스처 */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(113, 170, 141, 0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 90%, rgba(74, 124, 89, 0.04)  0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .worship-card {
+    padding: 4rem 3.5rem;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Header
+───────────────────────────────────────── */
+.worship-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.worship-header::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin: 1.5rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--sage), transparent);
+  border-radius: 2px;
 }
 
 .worship-header h1 {
-  font-size: 2.2rem;
+  font-family: 'Lora', serif;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  line-height: 1.25;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    145deg,
+    var(--forest-deep) 0%,
+    var(--forest-mid) 50%,
+    var(--moss) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.worship-header p {
-  font-size: 1rem;
-  color: var(--secondary-color);
+.worship-header p,
+.worship-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
   font-weight: 400;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+  margin-top: 0.6rem;
 }
 
-/* Premium Link Tiles */
+/* ─────────────────────────────────────────
+   Link Tiles
+───────────────────────────────────────── */
 .worship-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-bottom: 3.5rem;
+  gap: 1rem;
+  margin-bottom: 2.75rem;
 }
 
 .worship-link-btn {
@@ -107,132 +216,267 @@ body::before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 1rem;
-  border-radius: 24px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  gap: 0.35rem;
+  padding: 1.25rem 1rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border-soft);
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out),
+    border-color 0.35s ease,
+    background 0.35s ease;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
 
+.worship-link-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.worship-link-btn:hover::before { opacity: 1; }
+
 .worship-link-btn span {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.01em;
 }
 
 .worship-link-btn small {
-  font-size: 0.75rem;
-  opacity: 0.7;
+  font-size: 0.72rem;
+  opacity: 0.65;
+  letter-spacing: 0.01em;
 }
 
 .btn-youtube {
-  color: #ef4444;
+  color: #c0392b;
+  &:hover {
+    border-color: rgba(192, 57, 43, 0.3);
+    background: rgba(255, 245, 244, 0.9);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(192, 57, 43, 0.12);
+  }
 }
 
 .btn-blog {
-  color: #10b981;
+  color: var(--moss);
+  &:hover {
+    border-color: var(--border-dew);
+    background: rgba(232, 243, 237, 0.9);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(74, 124, 89, 0.14);
+  }
 }
 
-.worship-link-btn:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.1);
-  border-color: var(--accent-color);
-}
-
-/* Form refinement */
+/* ─────────────────────────────────────────
+   Form
+───────────────────────────────────────── */
 .worship-form {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-  display: block;
-  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--secondary-color);
-  margin-bottom: 0.75rem;
-  padding-left: 0.5rem;
+  letter-spacing: 0.09em;
+  color: var(--text-secondary);
+  margin-bottom: 0.65rem;
+  padding-left: 0.25rem;
 }
 
-.custom-input, .custom-select, .custom-textarea {
+/* Label leaf accent */
+.form-group label::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--sage);
+  flex-shrink: 0;
+}
+
+.custom-input,
+.custom-select,
+.custom-textarea {
   width: 100%;
-  max-width: 100%;
-  padding: 1.1rem 1.4rem;
-  background: #f8fafc;
-  border: 1px solid rgba(30, 41, 59, 0.04);
-  border-radius: 20px;
-  font-size: 1rem;
-  color: var(--text-main);
-  transition: all 0.4s ease;
+  padding: 1rem 1.25rem;
+  background: rgba(244, 248, 245, 0.7);
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--radius-input);
+  font-size: 0.97rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s var(--ease-out);
   appearance: none;
   -webkit-appearance: none;
+  /* 모바일 tap 시 zoom 방지 */
+  font-size: max(1rem, 16px);
 }
 
-.custom-input:focus, .custom-select:focus, .custom-textarea:focus {
+.custom-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.65;
+}
+
+.custom-input:focus,
+.custom-select:focus,
+.custom-textarea:focus {
   outline: none;
-  background: white;
-  border-color: var(--accent-color);
-  box-shadow: 0 10px 30px rgba(197, 163, 104, 0.1);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--sage);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
 }
 
-/* Submit Button Custom Luxe */
+.custom-input::placeholder,
+.custom-textarea::placeholder {
+  color: var(--sage-light);
+  font-size: 0.9rem;
+}
+
+/* ─────────────────────────────────────────
+   Submit Button
+───────────────────────────────────────── */
 .submit-btn {
-  margin-top: 2rem;
-  padding: 1.25rem;
-  background: var(--primary-color);
+  position: relative;
+  margin-top: 0.75rem;
+  padding: 1.125rem 1.5rem;
+  background: linear-gradient(135deg, var(--forest-mid) 0%, var(--moss) 100%);
   color: white;
   border: none;
-  border-radius: 24px;
-  font-size: 1.1rem;
+  border-radius: var(--radius-btn);
+  font-size: 1rem;
   font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 10px 25px rgba(30, 41, 59, 0.15);
-  letter-spacing: 0.02em;
+  overflow: hidden;
+  transition:
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s ease,
+    opacity 0.3s ease;
+  box-shadow:
+    0 8px 24px rgba(45, 90, 61, 0.3),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  /* 터치 타깃 최소 높이 */
+  min-height: 52px;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #2d3e5a;
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(30, 41, 59, 0.25);
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 36px rgba(45, 90, 61, 0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
-/* Success View Premium */
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─────────────────────────────────────────
+   Status Message
+───────────────────────────────────────── */
+.status-message {
+  margin-top: 1rem;
+  min-height: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.success-text {
+  color: var(--moss);
+  font-weight: 500;
+}
+
+/* ─────────────────────────────────────────
+   Success View
+───────────────────────────────────────── */
 .success-card {
   text-align: center;
 }
 
 .success-icon {
-  font-size: 5rem;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--dew), rgba(113, 170, 141, 0.25));
+  border: 1.5px solid var(--border-dew);
+  box-shadow: 0 8px 28px rgba(113, 170, 141, 0.2);
+  font-size: 2.5rem;
+  animation: bloomIn 0.7s var(--ease-spring);
+}
+
+.success-icon::before {
+  content: '🌿';
 }
 
 .success-title {
-  font-size: 2.4rem;
-  color: var(--primary-color);
-  margin-bottom: 1.5rem;
+  font-family: 'Lora', serif;
+  font-size: clamp(1.75rem, 5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--forest-deep);
+  margin-bottom: 1.75rem;
+  line-height: 1.3;
 }
 
 .sumamry-box {
-  background: rgba(191, 161, 93, 0.05);
-  border: 1px solid rgba(191, 161, 93, 0.1);
-  border-radius: 30px;
-  padding: 2.5rem;
-  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, rgba(232,243,237,0.7), rgba(244,248,245,0.5));
+  border: 1px solid var(--border-dew);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
   text-align: left;
 }
 
 .summary-item {
   margin-bottom: 1rem;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.97rem;
+  line-height: 1.65;
 }
 
 .summary-item:last-child {
@@ -240,151 +484,331 @@ body::before {
 }
 
 .summary-item strong {
-  color: var(--accent-color);
+  color: var(--sage);
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
+  font-weight: 700;
+}
+
+.success-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+}
+
+.blessing-reference {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sage);
+  margin-bottom: 0.75rem;
 }
 
 .success-blessing {
   font-family: 'Lora', serif;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: var(--secondary-color);
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
   font-style: italic;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
   position: relative;
-  padding: 0 1rem;
+  padding: 1.5rem 1.75rem;
+  background: linear-gradient(135deg, rgba(232,243,237,0.5), transparent);
+  border-left: 3px solid var(--border-dew);
+  border-radius: 0 1rem 1rem 0;
+  text-align: left;
 }
 
-.success-blessing::before, .success-blessing::after {
+.success-blessing::before {
   content: '"';
-  font-size: 3rem;
-  color: var(--accent-color);
-  opacity: 0.2;
+  font-size: 4rem;
+  font-style: normal;
+  color: var(--sage);
+  opacity: 0.15;
   position: absolute;
+  top: -0.5rem;
+  left: 0.5rem;
+  line-height: 1;
 }
-
-.success-blessing::before { top: -1.5rem; left: -1rem; }
-.success-blessing::after { bottom: -3.5rem; right: -1rem; }
 
 .success-actions {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
-.dashboard-btn, .reset-btn-link {
+.dashboard-btn,
+.reset-btn-link {
   width: 100%;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 52px;
 }
 
 .dashboard-btn {
-  background: var(--accent-color);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--moss) 100%);
   color: white;
-  border-radius: 24px;
-  padding: 1.25rem;
+  border-radius: var(--radius-btn);
+  padding: 1.125rem;
+  font-size: 0.97rem;
   font-weight: 700;
-  transition: all 0.3s ease;
+  letter-spacing: 0.02em;
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s ease;
+  box-shadow: 0 8px 24px rgba(113, 170, 141, 0.3);
 }
 
 .dashboard-btn:hover {
-  background: #ac8e4b;
-  transform: scale(1.02);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(113, 170, 141, 0.38);
 }
 
 .reset-btn-link {
   background: transparent;
-  color: var(--secondary-color);
-  font-weight: 600;
-  text-decoration: none;
+  color: var(--text-secondary);
   font-size: 0.9rem;
-  opacity: 0.6;
+  font-weight: 500;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Dashboard Enhancement */
+.reset-btn-link:hover {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────
+   Dashboard
+───────────────────────────────────────── */
+.dashboard-header {
+  margin-bottom: 1.75rem;
+}
+
 .dashboard-card h2 {
   font-family: 'Lora', serif;
-  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--forest-deep);
+  margin-bottom: 1.25rem;
 }
 
 .dashboard-tabs {
-  background: #f1f5f9;
-  border-radius: 100px;
-  padding: 0.5rem;
+  background: rgba(232, 243, 237, 0.6);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  padding: 0.375rem;
   display: flex;
   gap: 0.25rem;
-  margin-bottom: 2.5rem;
 }
 
 .tab-btn {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 0.75rem;
-  border-radius: 100px;
+  padding: 0.65rem 0.5rem;
+  border-radius: var(--radius-pill);
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--secondary-color);
+  font-family: inherit;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s var(--ease-out);
+  min-height: 40px;
 }
 
 .tab-btn.active {
   background: white;
-  color: var(--primary-color);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  color: var(--forest-deep);
+  box-shadow: 0 2px 12px rgba(26, 46, 31, 0.08);
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--forest-mid);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-list {
+  margin-bottom: 1.75rem;
 }
 
 .dashboard-item {
-  background: white;
-  border: 1px solid rgba(0,0,0,0.02);
-  border-radius: 24px;
-  padding: 1.75rem;
-  margin-bottom: 1.25rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-soft);
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
   text-align: left;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s var(--ease-out),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.dashboard-item:last-child {
+  margin-bottom: 0;
 }
 
 .dashboard-item:hover {
-  transform: translateX(5px);
-  border-color: var(--accent-color);
+  transform: translateX(4px);
+  border-color: var(--border-dew);
+  box-shadow: var(--shadow-sm);
+}
+
+.item-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
 }
 
 .item-family {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  color: var(--forest-deep);
 }
 
 .item-date {
-  font-size: 0.8rem;
-  opacity: 0.5;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
-/* Animations Premium */
-@keyframes fadeInUp {
+.item-prayer {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: 1.5px solid var(--border-dew);
+  border-radius: var(--radius-btn);
+  font-size: 0.93rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 52px;
+}
+
+.back-btn:hover {
+  background: var(--dew);
+  border-color: var(--sage);
+  color: var(--forest-mid);
+}
+
+/* ─────────────────────────────────────────
+   Animations
+───────────────────────────────────────── */
+@keyframes riseFromMist {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.98);
+    transform: translateY(24px) scale(0.97);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
-.worship-card {
-  animation: fadeInUp 1s cubic-bezier(0.19, 1, 0.22, 1);
+@keyframes bloomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─────────────────────────────────────────
+   Mobile Refinements (< 480px)
+───────────────────────────────────────── */
 @media (max-width: 480px) {
-  .worship-card {
-    padding: 3rem 1.5rem;
-    border-radius: 0;
+  .worship-container {
+    padding: 1.25rem 0.75rem 3rem;
+    align-items: flex-start;
   }
-  
-  .worship-header h1 {
-    font-size: 1.75rem;
+
+  .worship-card {
+    border-radius: 2rem;
+    padding: 2rem 1.25rem;
+  }
+
+  .worship-header {
+    margin-bottom: 2rem;
+  }
+
+  .worship-links {
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .worship-link-btn {
+    padding: 1.1rem 0.75rem;
+    border-radius: 1rem;
+  }
+
+  .worship-form {
+    gap: 1.25rem;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea {
+    padding: 0.9rem 1.1rem;
+    border-radius: 1rem;
+  }
+
+  .sumamry-box {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .success-blessing {
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    font-size: 0.93rem;
+  }
+
+  .dashboard-item {
+    padding: 1rem 1.125rem;
+    border-radius: 1rem;
+  }
+
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 0.6rem 0.25rem;
   }
 }

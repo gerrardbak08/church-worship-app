@@ -1,4 +1,4 @@
-import { WorshipLinks, WorshipFormData } from '../../types/worship';
+import { WorshipLinks, WorshipFormData, WorshipRecord, SupabaseRecord } from '../../types/worship';
 
 /**
  * Fetches the latest YouTube and Blog links via internal API to avoid CORS.
@@ -36,16 +36,17 @@ export async function submitWorshipForm(formData: WorshipFormData): Promise<stri
 
     const result = await response.json();
     return result.message;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : '전송 실패';
     console.error('Submission error:', error);
-    throw error;
+    throw new Error(message);
   }
 }
 
 /**
  * Fetches recent worship records for the dashboard.
  */
-export async function getRecentRecords(startDate?: string): Promise<any[]> {
+export async function getRecentRecords(startDate?: string): Promise<WorshipRecord[]> {
   try {
     let url = '/api/worship?count=50';
     if (startDate) {
@@ -54,7 +55,16 @@ export async function getRecentRecords(startDate?: string): Promise<any[]> {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch records');
     const data = await response.json();
-    return data.records || [];
+    
+    // Map snake_case from DB to camelCase for UI
+    return (data.records || []).map((record: SupabaseRecord) => ({
+      id: record.id,
+      date: record.date,
+      familyName: record.family_name,
+      content: record.content,
+      prayer: record.prayer,
+      created_at: record.created_at
+    }));
   } catch (error) {
     console.error("Error fetching recent records:", error);
     return [];

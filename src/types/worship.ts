@@ -5,6 +5,20 @@ export interface WorshipFormData {
   prayer: string;
 }
 
+export interface WorshipRecord extends WorshipFormData {
+  id: string;
+  created_at?: string;
+}
+
+export interface SupabaseRecord {
+  id: string;
+  date: string;
+  family_name: string;
+  content: string;
+  prayer: string;
+  created_at: string;
+}
+
 export interface WorshipLinks {
   youtubeUrl: string;
   blogUrl: string;
