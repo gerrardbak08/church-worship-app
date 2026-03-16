@@ -13,8 +13,13 @@ export async function GET(request: NextRequest) {
 
   // If fetching records for dashboard
   if (count || startDate) {
-    try {
-      let query = supabase
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.warn("Supabase environment variables are missing.");
+        return NextResponse.json({ records: [] });
+      }
+
+      try {
+        let query = supabase
         .from('worship_records')
         .select('*')
         .order('created_at', { ascending: false });

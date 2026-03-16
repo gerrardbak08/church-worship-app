@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,13 +17,13 @@ export default function RootLayout({
       <body className="antialiased">
         <ClerkProvider>
           <header className="clerk-nav">
-            <SignedOut>
+            <Show when="signed-out">
               <SignInButton />
               <SignUpButton />
-            </SignedOut>
-            <SignedIn>
+            </Show>
+            <Show when="signed-in">
               <UserButton />
-            </SignedIn>
+            </Show>
           </header>
           {children}
         </ClerkProvider>
