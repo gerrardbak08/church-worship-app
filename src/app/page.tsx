@@ -324,6 +324,16 @@ export default function WorshipPage() {
         <div className="status-message">
           {status && <span className={status.includes('완료') || status.includes('기록') ? 'success-text' : ''}>{status}</span>}
         </div>
+
+        <div className="worship-footer">
+          <button 
+            type="button" 
+            onClick={() => loadDashboard('weekly')} 
+            className="secondary-action-btn"
+          >
+            기록된 예배현황 보러가기
+          </button>
+        </div>
       </div>
     </div>
   );

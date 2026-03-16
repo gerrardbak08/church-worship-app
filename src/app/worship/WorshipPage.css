@@ -430,6 +430,47 @@ body::before {
 }
 
 /* ─────────────────────────────────────────
+   Footer Actions
+   ───────────────────────────────────────── */
+.worship-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-soft);
+  text-align: center;
+}
+
+.secondary-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--sage);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.8;
+}
+
+.secondary-action-btn:hover {
+  opacity: 1;
+  color: var(--moss);
+  transform: translateY(-2px);
+}
+
+.secondary-action-btn::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.secondary-action-btn:hover::after {
+  transform: translateX(4px);
+}
+
+/* ─────────────────────────────────────────
    Success View
 ───────────────────────────────────────── */
 .success-card {
