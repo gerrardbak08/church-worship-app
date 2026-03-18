@@ -110,23 +110,22 @@ export default function WorshipPage() {
   const getWeekOfMonth = (date: Date) => {
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const day = firstDayOfMonth.getDay(); // 0 is Sunday
-    const adjustedFirstDay = day === 0 ? 6 : day - 1; // 0=Mon, 6=Sun
-    return Math.ceil((date.getDate() + adjustedFirstDay) / 7);
+    return Math.ceil((date.getDate() + day) / 7);
   };
 
   const getFilterLabel = (filter: string) => {
     const now = new Date();
     if (filter === 'weekly') {
-      const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
-      return `${monday.getMonth() + 1}월 ${getWeekOfMonth(monday)}주`;
+      const day = now.getDay(); // 0 is Sunday
+      const diff = now.getDate() - day; // Go to Sunday
+      const sunday = new Date(now.getFullYear(), now.getMonth(), diff);
+      return `${sunday.getMonth() + 1}월 ${getWeekOfMonth(sunday)}주`;
     }
     if (filter === 'lastWeek') {
       const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1) - 7;
-      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
-      return `${monday.getMonth() + 1}월 ${getWeekOfMonth(monday)}주`;
+      const diff = now.getDate() - day - 7; // Previous Sunday
+      const sunday = new Date(now.getFullYear(), now.getMonth(), diff);
+      return `${sunday.getMonth() + 1}월 ${getWeekOfMonth(sunday)}주`;
     }
     if (filter === 'monthly') {
       return `${now.getMonth() + 1}월`;
@@ -140,21 +139,21 @@ export default function WorshipPage() {
     let endDate: string | undefined;
 
     if (filter === 'weekly') {
-      const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
-      monday.setHours(0, 0, 0, 0);
-      startDate = monday.toISOString().split('T')[0];
+      const day = now.getDay(); // 0 is Sunday
+      const diff = now.getDate() - day; // Current Sunday
+      const startsAt = new Date(now.getFullYear(), now.getMonth(), diff);
+      startsAt.setHours(0, 0, 0, 0);
+      startDate = startsAt.toISOString().split('T')[0];
     } else if (filter === 'lastWeek') {
       const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1) - 7;
-      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
-      monday.setHours(0, 0, 0, 0);
-      startDate = monday.toISOString().split('T')[0];
+      const diff = now.getDate() - day - 7; // Previous Sunday
+      const startsAt = new Date(now.getFullYear(), now.getMonth(), diff);
+      startsAt.setHours(0, 0, 0, 0);
+      startDate = startsAt.toISOString().split('T')[0];
       
-      const sunday = new Date(now.getFullYear(), now.getMonth(), diff + 6);
-      sunday.setHours(23, 59, 59, 999);
-      endDate = sunday.toISOString().split('T')[0];
+      const endsAt = new Date(now.getFullYear(), now.getMonth(), diff + 6); // Previous Saturday
+      endsAt.setHours(23, 59, 59, 999);
+      endDate = endsAt.toISOString().split('T')[0];
     } else if (filter === 'monthly') {
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
       startDate = firstDay.toISOString().split('T')[0];
