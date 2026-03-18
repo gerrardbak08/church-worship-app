@@ -10,9 +10,10 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const count = searchParams.get('count');
   const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
 
   // If fetching records for dashboard
-  if (count || startDate) {
+  if (count || startDate || endDate) {
       if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         console.warn("Supabase environment variables are missing.");
         return NextResponse.json({ records: [] });
@@ -26,6 +27,10 @@ export async function GET(request: NextRequest) {
       
       if (startDate) {
         query = query.gte('date', startDate);
+      }
+      
+      if (endDate) {
+        query = query.lte('date', endDate);
       }
 
       if (count) {

@@ -38,7 +38,7 @@ export default function WorshipPage() {
   const [lastSubmission, setLastSubmission] = useState<WorshipFormData | null>(null);
   const [recentRecords, setRecentRecords] = useState<WorshipRecord[]>([]);
   const [viewMode, setViewMode] = useState<'form' | 'success' | 'dashboard'>('form');
-  const [dashFilter, setDashFilter] = useState<'weekly' | 'monthly' | 'all'>('weekly');
+  const [dashFilter, setDashFilter] = useState<'lastWeek' | 'weekly' | 'monthly' | 'all'>('weekly');
 
   useEffect(() => {
     async function loadLinks() {
@@ -107,27 +107,67 @@ export default function WorshipPage() {
     setShowDirectInput(false);
   };
 
-  const getStartDate = (filter: 'weekly' | 'monthly' | 'all') => {
-    const now = new Date();
-    if (filter === 'weekly') {
-      const day = now.getDay(); // 0 is Sunday
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
-      const monday = new Date(now.setDate(diff));
-      monday.setHours(0, 0, 0, 0);
-      return monday.toISOString().split('T')[0];
-    } else if (filter === 'monthly') {
-      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-      return firstDay.toISOString().split('T')[0];
-    }
-    return undefined;
+  const getWeekOfMonth = (date: Date) => {
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const day = firstDayOfMonth.getDay(); // 0 is Sunday
+    const adjustedFirstDay = day === 0 ? 6 : day - 1; // 0=Mon, 6=Sun
+    return Math.ceil((date.getDate() + adjustedFirstDay) / 7);
   };
 
-  const loadDashboard = async (filter: 'weekly' | 'monthly' | 'all' = 'weekly') => {
+  const getFilterLabel = (filter: string) => {
+    const now = new Date();
+    if (filter === 'weekly') {
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+      return `${monday.getMonth() + 1}월 ${getWeekOfMonth(monday)}주`;
+    }
+    if (filter === 'lastWeek') {
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1) - 7;
+      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+      return `${monday.getMonth() + 1}월 ${getWeekOfMonth(monday)}주`;
+    }
+    if (filter === 'monthly') {
+      return `${now.getMonth() + 1}월`;
+    }
+    return '전체';
+  };
+
+  const getDateRange = (filter: 'lastWeek' | 'weekly' | 'monthly' | 'all') => {
+    const now = new Date();
+    let startDate: string | undefined;
+    let endDate: string | undefined;
+
+    if (filter === 'weekly') {
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+      monday.setHours(0, 0, 0, 0);
+      startDate = monday.toISOString().split('T')[0];
+    } else if (filter === 'lastWeek') {
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1) - 7;
+      const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+      monday.setHours(0, 0, 0, 0);
+      startDate = monday.toISOString().split('T')[0];
+      
+      const sunday = new Date(now.getFullYear(), now.getMonth(), diff + 6);
+      sunday.setHours(23, 59, 59, 999);
+      endDate = sunday.toISOString().split('T')[0];
+    } else if (filter === 'monthly') {
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      startDate = firstDay.toISOString().split('T')[0];
+    }
+    return { startDate, endDate };
+  };
+
+  const loadDashboard = async (filter: 'lastWeek' | 'weekly' | 'monthly' | 'all' = 'weekly') => {
     setIsSubmitting(true);
     setDashFilter(filter);
     const { getRecentRecords } = await import('../lib/worship/service');
-    const startDate = getStartDate(filter);
-    const records = await getRecentRecords(startDate);
+    const { startDate, endDate } = getDateRange(filter);
+    const records = await getRecentRecords(startDate, endDate);
     setRecentRecords(records);
     setViewMode('dashboard');
     setIsSubmitting(false);
@@ -180,13 +220,17 @@ export default function WorshipPage() {
             <h2>가정예배 현황</h2>
             <div className="dashboard-tabs">
               <button 
+                className={`tab-btn ${dashFilter === 'lastWeek' ? 'active' : ''}`}
+                onClick={() => loadDashboard('lastWeek')}
+              >{getFilterLabel('lastWeek')}</button>
+              <button 
                 className={`tab-btn ${dashFilter === 'weekly' ? 'active' : ''}`}
                 onClick={() => loadDashboard('weekly')}
-              >이번 주</button>
+              >{getFilterLabel('weekly')}</button>
               <button 
                 className={`tab-btn ${dashFilter === 'monthly' ? 'active' : ''}`}
                 onClick={() => loadDashboard('monthly')}
-              >이번 달</button>
+              >{getFilterLabel('monthly')}</button>
               <button 
                 className={`tab-btn ${dashFilter === 'all' ? 'active' : ''}`}
                 onClick={() => loadDashboard('all')}
