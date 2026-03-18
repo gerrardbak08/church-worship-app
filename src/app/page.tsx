@@ -237,17 +237,26 @@ export default function WorshipPage() {
             </div>
           </header>
 
-          <div className="dashboard-list">
+          <div className="dashboard-table-wrapper">
             {recentRecords.length > 0 ? (
-              recentRecords.map((record) => (
-                <div key={record.id} className="dashboard-item">
-                  <div className="item-main">
-                    <span className="item-family">{record.familyName}</span>
-                    <span className="item-date">{record.date}</span>
-                  </div>
-                  {record.prayer && <p className="item-prayer">{record.prayer}</p>}
-                </div>
-              ))
+              <table className="dashboard-table">
+                <thead>
+                  <tr>
+                    <th className="th-family">가정</th>
+                    <th className="th-date">날짜</th>
+                    <th className="th-prayer">기도제목 / 내용</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentRecords.map((record) => (
+                    <tr key={record.id}>
+                      <td className="td-family">{record.familyName}</td>
+                      <td className="td-date">{record.date}</td>
+                      <td className="td-prayer">{record.prayer || record.content || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
               <div className="empty-state">
                 <p>아직 기록된 예배가 없습니다.</p>
