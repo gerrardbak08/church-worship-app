@@ -107,30 +107,58 @@ export default function WorshipPage() {
     setShowDirectInput(false);
   };
 
+  /**
+   * Returns the Sunday that starts the week containing the given date.
+   * A week runs Sunday(일) ~ Saturday(토).
+   */
+  const getSunday = (d: Date) => {
+    const result = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    result.setDate(result.getDate() - result.getDay()); // go back to Sunday
+    return result;
+  };
+
+  /**
+   * Calculates the week-of-month number for a given date.
+   * Week 1 contains the 1st of the month.
+   * Each week runs Sunday ~ Saturday.
+   */
   const getWeekOfMonth = (date: Date) => {
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const day = firstDayOfMonth.getDay(); // 0 is Sunday
-    return Math.ceil((date.getDate() + day) / 7);
+    const firstOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    // Sunday that starts the week of the 1st
+    const firstWeekSunday = getSunday(firstOfMonth);
+    // Sunday that starts the week of the target date
+    const targetWeekSunday = getSunday(date);
+    const diffMs = targetWeekSunday.getTime() - firstWeekSunday.getTime();
+    return Math.round(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1;
   };
 
   const getFilterLabel = (filter: string) => {
     const now = new Date();
     if (filter === 'weekly') {
-      const day = now.getDay(); // 0 is Sunday
-      const diff = now.getDate() - day; // Go to Sunday
-      const sunday = new Date(now.getFullYear(), now.getMonth(), diff);
+      const sunday = getSunday(now);
       return `${sunday.getMonth() + 1}월 ${getWeekOfMonth(sunday)}주`;
     }
     if (filter === 'lastWeek') {
-      const day = now.getDay();
-      const diff = now.getDate() - day - 7; // Previous Sunday
-      const sunday = new Date(now.getFullYear(), now.getMonth(), diff);
-      return `${sunday.getMonth() + 1}월 ${getWeekOfMonth(sunday)}주`;
+      const sunday = getSunday(now);
+      // Go back 7 days to get last week's Sunday
+      const lastSunday = new Date(sunday);
+      lastSunday.setDate(lastSunday.getDate() - 7);
+      return `${lastSunday.getMonth() + 1}월 ${getWeekOfMonth(lastSunday)}주`;
     }
     if (filter === 'monthly') {
       return `${now.getMonth() + 1}월`;
     }
     return '전체';
+  };
+
+  /**
+   * Formats a local Date as 'YYYY-MM-DD' without UTC shift.
+   */
+  const toDateKey = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   };
 
   const getDateRange = (filter: 'lastWeek' | 'weekly' | 'monthly' | 'all') => {
@@ -139,24 +167,26 @@ export default function WorshipPage() {
     let endDate: string | undefined;
 
     if (filter === 'weekly') {
-      const day = now.getDay(); // 0 is Sunday
-      const diff = now.getDate() - day; // Current Sunday
-      const startsAt = new Date(now.getFullYear(), now.getMonth(), diff);
-      startsAt.setHours(0, 0, 0, 0);
-      startDate = startsAt.toISOString().split('T')[0];
+      // This week: Sunday ~ Saturday
+      const sunday = getSunday(now);
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      startDate = toDateKey(sunday);
+      endDate = toDateKey(saturday);
     } else if (filter === 'lastWeek') {
-      const day = now.getDay();
-      const diff = now.getDate() - day - 7; // Previous Sunday
-      const startsAt = new Date(now.getFullYear(), now.getMonth(), diff);
-      startsAt.setHours(0, 0, 0, 0);
-      startDate = startsAt.toISOString().split('T')[0];
-      
-      const endsAt = new Date(now.getFullYear(), now.getMonth(), diff + 6); // Previous Saturday
-      endsAt.setHours(23, 59, 59, 999);
-      endDate = endsAt.toISOString().split('T')[0];
+      // Last week: Previous Sunday ~ Previous Saturday
+      const thisSunday = getSunday(now);
+      const lastSunday = new Date(thisSunday);
+      lastSunday.setDate(thisSunday.getDate() - 7);
+      const lastSaturday = new Date(lastSunday);
+      lastSaturday.setDate(lastSunday.getDate() + 6);
+      startDate = toDateKey(lastSunday);
+      endDate = toDateKey(lastSaturday);
     } else if (filter === 'monthly') {
       const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-      startDate = firstDay.toISOString().split('T')[0];
+      const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      startDate = toDateKey(firstDay);
+      endDate = toDateKey(lastDay);
     }
     return { startDate, endDate };
   };
