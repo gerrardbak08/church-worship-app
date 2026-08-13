@@ -246,7 +246,17 @@ export default function WorshipPage() {
       <div className={`worship-container ${notoLinks.className}`}>
         <div className="worship-card dashboard-card">
           <header className="dashboard-header">
-            <h2>가정예배 현황</h2>
+            <div className="dashboard-header-top">
+              <h2>가정예배 현황</h2>
+              <a
+                href="/api/backup"
+                download
+                className="backup-btn"
+                title="전체 데이터를 CSV 파일로 다운로드"
+              >
+                ⬇ CSV 백업
+              </a>
+            </div>
             <div className="dashboard-tabs">
               <button 
                 className={`tab-btn ${dashFilter === 'lastWeek' ? 'active' : ''}`}

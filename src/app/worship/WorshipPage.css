@@ -636,6 +636,45 @@ body::before {
   margin-bottom: 1.75rem;
 }
 
+.dashboard-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.dashboard-header-top h2 {
+  margin-bottom: 0 !important;
+}
+
+.backup-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  background: rgba(232, 243, 237, 0.8);
+  border: 1.5px solid var(--border-dew);
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--moss);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s var(--ease-out);
+  flex-shrink: 0;
+}
+
+.backup-btn:hover {
+  background: var(--dew);
+  border-color: var(--sage);
+  color: var(--forest-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 124, 89, 0.15);
+}
+
 .dashboard-card h2 {
   font-family: 'Lora', serif;
   font-size: 1.6rem;
