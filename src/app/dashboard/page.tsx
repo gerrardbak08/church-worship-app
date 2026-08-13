@@ -428,32 +428,39 @@ export default function Dashboard() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-      <section className="card-surface flex flex-col gap-3 p-6 text-black">
-        <p className="text-sm font-semibold tracking-[0.2em] text-[#6b8e23]">
-          사랑과평안의교회
-        </p>
-        <h1 className="text-3xl font-bold md:text-4xl text-black">
+      <section className="card-surface flex flex-col gap-3 p-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[calc(var(--radius)-2px)] bg-[var(--primary)]">
+            <svg width="28" height="28" viewBox="0 0 512 512">
+              <path fill="#fff" d="M256 120 L380 224 L380 396 L132 396 L132 224 Z" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold tracking-[0.2em] text-[var(--primary)]">
+            사랑과평안의교회
+          </p>
+        </div>
+        <h1 className="text-3xl font-bold md:text-4xl text-[var(--foreground)]">
           가정예배 실시 현황 모니터링
         </h1>
-        <p className="max-w-4xl text-sm leading-7 text-gray-600 md:text-base">
+        <p className="max-w-4xl text-sm leading-7 text-[var(--muted-foreground)] md:text-base">
           관리자용 모니터링 페이지입니다. (데이터는 브라우저에 임시 저장됩니다.)
         </p>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[1.1fr_1.5fr_1.4fr] text-black">
-        <article className="card-surface flex flex-col gap-4 p-5 bg-white rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold">가정 관리</h2>
+      <section className="grid gap-4 lg:grid-cols-[1.1fr_1.5fr_1.4fr]">
+        <article className="card-surface flex flex-col gap-4 p-5">
+          <h2 className="text-2xl font-bold text-[var(--foreground)]">가정 관리</h2>
           <form className="flex gap-2" onSubmit={handleAddHousehold}>
             <input
               type="text"
               placeholder="예: 2가정"
               value={newHouseholdName}
               onChange={(event) => setNewHouseholdName(event.target.value)}
-              className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-[#6b8e23]"
+              className="w-full rounded-[calc(var(--radius)-4px)] border border-[var(--input)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--primary)]"
             />
             <button
               type="submit"
-              className="rounded-xl bg-[#6b8e23] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+              className="rounded-[calc(var(--radius)-4px)] bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] transition hover:opacity-90"
             >
               추가
             </button>
@@ -461,22 +468,22 @@ export default function Dashboard() {
 
           <div className="space-y-2">
             {households.length === 0 ? (
-              <p className="rounded-xl bg-gray-50 px-3 py-2 text-sm text-gray-500">
+              <p className="rounded-[calc(var(--radius)-4px)] bg-[var(--muted)] px-3 py-2 text-sm text-[var(--muted-foreground)]">
                 먼저 가정을 추가해 주세요.
               </p>
             ) : (
               households.map((household) => (
                 <div
                   key={household.id}
-                  className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-3 py-2"
+                  className="flex items-center justify-between rounded-[calc(var(--radius)-4px)] border border-[var(--border)] bg-[var(--background)] px-3 py-2"
                 >
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-[var(--foreground)]">
                     {household.name}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleDeleteHousehold(household.id)}
-                    className="rounded-md px-2 py-1 text-xs font-semibold text-rose-600 transition hover:bg-rose-50"
+                    className="rounded-md px-2 py-1 text-xs font-semibold text-[var(--destructive)] transition hover:bg-[var(--muted)]"
                   >
                     삭제
                   </button>
@@ -486,23 +493,23 @@ export default function Dashboard() {
           </div>
         </article>
 
-        <article className="card-surface flex flex-col gap-4 p-5 bg-white rounded-2xl shadow-sm">
+        <article className="card-surface flex flex-col gap-4 p-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-2xl font-bold text-[var(--foreground)]">
               {formatMonth(monthCursor)}
             </h2>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={goToPreviousMonth}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-600 transition hover:border-[#6b8e23]"
+                className="rounded-[calc(var(--radius)-2px)] border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-sm font-semibold text-[var(--muted-foreground)] transition hover:border-[var(--primary)]"
               >
                 이전
               </button>
               <button
                 type="button"
                 onClick={goToNextMonth}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-600 transition hover:border-[#6b8e23]"
+                className="rounded-[calc(var(--radius)-2px)] border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-sm font-semibold text-[var(--muted-foreground)] transition hover:border-[var(--primary)]"
               >
                 다음
               </button>
@@ -513,7 +520,7 @@ export default function Dashboard() {
             {DAY_LABELS.map((dayLabel) => (
               <div
                 key={dayLabel}
-                className="pb-1 text-center text-xs font-semibold text-gray-400"
+                className="pb-1 text-center text-xs font-semibold text-[var(--muted-foreground)]"
               >
                 {dayLabel}
               </div>
@@ -529,17 +536,17 @@ export default function Dashboard() {
                   key={dayKey}
                   type="button"
                   onClick={() => setSelectedDateKey(dayKey)}
-                  className={`relative min-h-20 rounded-xl border px-2 py-2 text-left transition ${
+                  className={`relative min-h-20 rounded-[calc(var(--radius)-4px)] border px-2 py-2 text-left text-[var(--foreground)] transition ${
                     isSelected
-                      ? "border-[#6b8e23] bg-green-50"
-                      : "border-gray-100 bg-white hover:border-[#6b8e23]"
+                      ? "border-[var(--primary)] bg-[var(--muted)]"
+                      : "border-[var(--border)] bg-[var(--background)] hover:border-[var(--primary)]"
                   } ${isCurrentMonth ? "" : "opacity-45"}`}
                 >
                   <p className="text-sm font-semibold">
                     {day.getDate()}
                   </p>
                   {checkedCount > 0 && (
-                    <span className="absolute bottom-2 right-2 rounded-full bg-[#6b8e23] px-2 py-0.5 text-[10px] font-semibold text-white">
+                    <span className="absolute bottom-2 right-2 rounded-full bg-[var(--primary)] px-2 py-0.5 text-[10px] font-semibold text-[var(--primary-foreground)]">
                       {checkedCount}가정
                     </span>
                   )}
@@ -549,15 +556,15 @@ export default function Dashboard() {
           </div>
         </article>
 
-        <article className="card-surface flex flex-col gap-4 p-5 bg-white rounded-2xl shadow-sm">
-          <div className="rounded-2xl bg-gray-50 p-4">
-            <p className="text-xs font-semibold text-gray-400">선택 날짜</p>
-            <p className="mt-1 text-lg font-semibold">
+        <article className="card-surface flex flex-col gap-4 p-5">
+          <div className="rounded-[calc(var(--radius)-2px)] bg-[var(--muted)] p-4">
+            <p className="text-xs font-semibold text-[var(--muted-foreground)]">선택 날짜</p>
+            <p className="mt-1 text-lg font-semibold text-[var(--foreground)]">
               {formatDate(selectedDate)}
             </p>
           </div>
 
-          <h2 className="text-2xl font-bold">임시 기록 (로컬)</h2>
+          <h2 className="text-2xl font-bold text-[var(--foreground)]">임시 기록 (로컬)</h2>
           <div className="max-h-[420px] space-y-3 overflow-auto pr-1">
             {households.map((household) => {
               const key = getRecordKey(household.id, selectedDateKey);
@@ -566,9 +573,9 @@ export default function Dashboard() {
               return (
                 <div
                   key={household.id}
-                  className="rounded-2xl border border-gray-100 bg-white p-3"
+                  className="rounded-[calc(var(--radius)-2px)] border border-[var(--border)] bg-[var(--background)] p-3"
                 >
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-[var(--foreground)]">
                     <input
                       type="checkbox"
                       checked={record?.checked ?? false}
@@ -577,7 +584,7 @@ export default function Dashboard() {
                           checked: event.target.checked,
                         })
                       }
-                      className="h-4 w-4 accent-[#6b8e23]"
+                      className="h-4 w-4 accent-[var(--primary)]"
                     />
                     {household.name}
                   </label>
@@ -589,7 +596,7 @@ export default function Dashboard() {
                       })
                     }
                     placeholder="메모를 입력하세요"
-                    className="h-20 w-full resize-none rounded-xl border border-gray-100 px-3 py-2 text-sm outline-none transition focus:border-[#6b8e23]"
+                    className="h-20 w-full resize-none rounded-[calc(var(--radius)-4px)] border border-[var(--border)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--primary)]"
                   />
                 </div>
               );

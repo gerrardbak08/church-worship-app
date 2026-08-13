@@ -37,7 +37,7 @@ export default function WorshipPage() {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [lastSubmission, setLastSubmission] = useState<WorshipFormData | null>(null);
   const [recentRecords, setRecentRecords] = useState<WorshipRecord[]>([]);
-  const [viewMode, setViewMode] = useState<'form' | 'success' | 'dashboard'>('form');
+  const [viewMode, setViewMode] = useState<'splash' | 'form' | 'success' | 'dashboard'>('splash');
   const [dashFilter, setDashFilter] = useState<'lastWeek' | 'weekly' | 'monthly' | 'all'>('weekly');
 
   useEffect(() => {
@@ -46,6 +46,13 @@ export default function WorshipPage() {
       setLinks(latestLinks);
     }
     loadLinks();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setViewMode((current) => (current === 'splash' ? 'form' : current));
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -203,6 +210,20 @@ export default function WorshipPage() {
   };
 
 
+  if (viewMode === 'splash') {
+    return (
+      <div className={`splash-screen ${notoLinks.className}`}>
+        <div className="splash-icon">
+          <svg width="62" height="62" viewBox="0 0 512 512">
+            <path fill="#fff" d="M256 120 L380 224 L380 396 L132 396 L132 224 Z" />
+          </svg>
+        </div>
+        <h1 className={lora.className}>사랑과 평안의 교회</h1>
+        <p>가족과 함께하는 은혜로운 예배 기록</p>
+      </div>
+    );
+  }
+
   if (viewMode === 'success') {
     return (
       <div className={`worship-container ${notoLinks.className}`}>
@@ -316,6 +337,11 @@ export default function WorshipPage() {
     <div className={`worship-container ${notoLinks.className}`}>
       <div className="worship-card">
         <header className="worship-header">
+          <div className="brand-icon">
+            <svg width="34" height="34" viewBox="0 0 512 512">
+              <path fill="#fff" d="M256 120 L380 224 L380 396 L132 396 L132 224 Z" />
+            </svg>
+          </div>
           <h1 className={lora.className}>사랑과 평안의 교회</h1>
           <p className="worship-subtitle">가족과 함께하는 은혜로운 예배 기록</p>
         </header>

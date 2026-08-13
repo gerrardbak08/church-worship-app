@@ -1,17 +1,36 @@
 @import "tailwindcss";
 
+/*
+ * 사랑과 평안의 교회 앱 패밀리 — 공유 토큰 (shadcn 구조)
+ * malsseum(암송말씀)과 동일한 구조: flat card, thin border, 0.75rem radius.
+ * primary만 앱 정체성에 맞게 그린 계열. 자세한 내용은 docs/DESIGN.md 참고.
+ */
 :root {
-  --background: #f3f7f4;
-  --foreground: #1f2d28;
-  --color-ink: #1f2d28;
-  --color-ink-soft: #5f6d67;
-  --color-line: #d8e2db;
-  --color-accent: #71aa8d;
-  --color-accent-soft: #e8f3ed;
-  --color-accent-strong: #2f7a53;
-  --color-sky: #ebf2fb;
+  --background: #ffffff;
+  --foreground: #142720;
+  --card: #ffffff;
+  --card-foreground: #142720;
+  --primary: #1c5e3d;
+  --primary-foreground: #ffffff;
+  --muted: #f1f4f2;
+  --muted-foreground: #5c6b62;
+  --success: #1d8644;
+  --success-foreground: #ffffff;
+  --destructive: #dc2828;
+  --destructive-foreground: #ffffff;
+  --border: #e2e7e3;
+  --input: #e2e7e3;
+  --ring: #1c5e3d;
+  --radius: 0.75rem;
+
+  --color-ink: var(--foreground);
+  --color-ink-soft: var(--muted-foreground);
+  --color-line: var(--border);
+  --color-accent: var(--primary);
+  --color-accent-soft: #eaf2ec;
+  --color-accent-strong: #134a33;
   --font-sans-stack: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-  --font-title-stack: "MaruBuri", "Nanum Myeongjo", "Noto Serif KR", serif;
+  --font-title-stack: "Lora", "Noto Serif KR", "Nanum Myeongjo", serif;
 }
 
 @theme inline {
@@ -27,11 +46,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 0%, #e9f3ec 0%, transparent 40%),
-    radial-gradient(circle at 90% 100%, #e6f0ff 0%, transparent 36%),
-    linear-gradient(180deg, #f9fbf9 0%, #eff5f2 100%);
-  color: var(--color-ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans-stack);
 }
 
@@ -41,15 +57,8 @@ body {
 }
 
 .card-surface {
-  border: 1px solid var(--color-line);
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 30px rgba(52, 78, 62, 0.08);
-}
-
-@media (max-width: 640px) {
-  .card-surface {
-    border-radius: 1rem;
-  }
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(20, 39, 32, 0.05);
 }
